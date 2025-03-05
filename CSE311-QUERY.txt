@@ -1,0 +1,138 @@
+Write a query that displays the last name , weekly salary, department number of the employees. Name the salary column as "Weekly Salary".
+
+SELECT lname, salary/4 AS weekly_salary, dname
+from employee,department
+where dno = dnumber
+
+SELECT employee.lname, employee.salary/4 AS weekly_salary, department.dname
+from employee,department
+where employee.dno = department.dnumber
+
+SELECT e.lname, e.salary/4 AS weekly_salary, d.dname
+from employee as e,department as d
+where e.dno = d.dnumber
+
+-
+
+Retrieve the birth date and address of the employee whose name is 'John A. Smith'.
+
+SELECT e.bdate, e.address
+FROM employee as e
+WHERE e.fname ='John' and e.minit = 'A' and e.lname ='Smith'
+
+-
+
+Retrieve the name and address of all employees who work for the 'Research' department.
+
+SELECT e.fname, e.lname, e.address
+from employee as e, department as d
+where e.dno = d.dnumber and d.dname='Research'
+
+-
+
+For every project located in 'Stafford', list the project number, the controlling department number, and the department manager's last name, address, and birth date.
+
+SELECT p.pnumber, p.dnum, e.lname, e.bdate, e.address
+FROM project as p, department as d, employee as e
+WHERE p.dnum = d.dnumber AND d.mgrssn = e.ssn AND p.plocation = 'Stafford'
+
+-
+
+*Bonus Question: For each employee, retrieve the employee's name, and the name of his or her immediate supervisor.
+
+SELECT e.fname, e.minit, e.lname, s.fname, s.minit, s.lname
+FROM employee as e, employee as s
+WHERE s.ssn = e.superssn
+
+-
+Retrieve all the attribute values of EMPLOYEES who work in department 5.
+
+SELECT e.*
+FROM employee as e
+WHERE e.dno = 5
+
+-
+
+Retrieve all the attributes of an employee and attributes of DEPARTMENT he works in for every employee of ‘Research’ department.
+
+SELECT e.*, d.*
+FROM employee as e, department as d
+WHERE e.dno = d.dnumber AND d.dname = 'Research'
+
+-
+
+Make a list of all project numbers for projects that involve an employee whose last name is 'Smith' as a worker or as a manager of the department that controls the project.
+
+SELECT pnumber, pname
+FROM project,department,employee
+WHERE dnum = dnumber AND mgrssn = ssn AND lname ='Smith'
+
+UNION ALL
+
+SELECT pnumber, pname
+FROM project,works_on,employee
+WHERE pnumber = pno AND essn = ssn AND lname ='Smith'
+
+To use UNION the SELECT values has to be the same.
+
+-
+
+Retrieve the name and address of all employees who work for the 'Research' department.
+
+SELECT e.fname, e.lname, e.address
+FROM employee as e
+WHERE e.dno IN (SELECT d.dnumber
+                FROM department as d
+                WHERE d.dname = 'Research')
+
+-
+
+Retrieve the name and address of all employees who work for the 'Research' or 'Administration' department.
+
+
+SELECT e.fname, e.lname, e.address
+FROM employee as e
+WHERE e.dno IN (SELECT d.dnumber
+                FROM department as d
+                WHERE d.dname = 'Research' OR d.dname = 'Administration')
+
+-
+
+Lab Task: Retrieve the name of each employee who has a dependent with the same first name as the employee.
+
+SELECT e.fname
+FROM employee as e, dependent as d
+WHERE e.ssn = d.essn AND e.fname = d.dependent_name
+
+SELECT e.fname
+FROM employee as e
+WHERE e.ssn IN (SELECT d.essn
+                FROM dependent as d
+                WHERE e.fname = d.dependent_name)
+
+SELECT E.FNAME, E.LNAME 
+ FROM EMPLOYEE AS E 
+ WHERE E.SSN IN (SELECT ESSN 
+                 FROM DEPENDENT 
+                 WHERE ESSN=E.SSN AND E.FNAME=DEPENDENT_NAME)
+-
+
+Retrieve the social security numbers of all employees who work on project number 1, 2, or 3.
+
+SELECT DISTINCT essn
+FROM works_on
+WHERE pno IN (1,2,3)
+
+-
+
+Retrieve the names of all employees who do not have supervisors.
+
+SELECT e.fname, e.lname
+FROM employee as e
+WHERE e.superssn is NULL
+
+Retrieve the names of all employees who does have supervisors.
+
+SELECT e.fname, e.lname
+FROM employee as e
+WHERE e.superssn is not NULL
