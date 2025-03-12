@@ -1,0 +1,54 @@
+12/03/25
+MID 
+Query in Word file and screenshot -> Total file upload to canvas
+
+-->Retrieve the names of employees who have no dependents.
+
+SELECT fname, lname
+FROM employee
+WHERE NOT EXISTS 
+(SELECT * FROM dependent WHERE ssn = essn)
+
+--> Retrieve the social security numbers of all employees who work on project number 1, 2, or 3.
+
+SELECT DISTINCT Essn 
+FROM works_on
+WHERE pno IN (1,2,3)
+
+DISTINCT to avoid repeated data
+
+-->Retrieve the names of all employees who do not have supervisors.
+
+SELECT fname, lname 
+FROM employee
+WHERE superssn IS NULL
+
+--> Retrieve all employees whose address is in Houston, Texas. Here, the value of the ADDRESS attribute must contain the substring 'Houston TX‘ in it.
+
+SELECT fname, lname
+FROM employee
+WHERE address LIKE '%Houston%'
+
+*From the First name search 'am' from the names.
+SELECT fname, lname, ssn
+FROM employee
+WHERE fname LIKE '%am%'
+
+*Third character of the fname is m
+SELECT fname, lname, ssn
+FROM employee
+WHERE fname LIKE '__m%'
+
+SELECT fname, lname, ssn
+FROM employee
+WHERE fname LIKE '__ma%'
+
+-->Retrieve all employees who were born during the 1960s.
+
+SELECT *
+FROM employee
+WHERE bdate LIKE '__6%'
+
+SELECT *
+FROM employee
+WHERE bdate LIKE '196%'

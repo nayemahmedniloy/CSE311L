@@ -1,0 +1,84 @@
+COMPANY 2 DATABASE
+------------------
+
+-->Cartesian value 
+SELECT e.Last_Name, d.Department_Name
+FROM emps e, depts d
+
+SELECT e.Last_Name, d.Department_Name, e.Employee_Id, d.Department_Id, e.Department_Id
+FROM emps e, depts d
+WHERE e.Department_Id = d.Department_Id;
+
+-->JOIN, LEFT JOIN , RIGHT JOIN-->
+SELECT e.Last_Name, d.Department_Name, e.Employee_Id, d.Department_Id, e.Department_Id
+FROM emps e JOIN depts d
+ON e.Department_Id = d.Department_Id;
+
+-->String added with the name of employee and manager | alias 
+SELECT CONCAT(worker.Last_Name, ' works for ', manager.Last_Name)
+FROM emps worker JOIN emps manager
+ON worker.Manager_id=manager.Employee_Id
+
+SELECT e.Employee_Id, e.First_Name, e.Last_Name, d.Department_id, d.Department_Name
+FROM emps e INNER JOIN depts d
+ON e.Department_Id = d.Department_id;
+
+-->Write a query to display the last name, department number, and department name for all employees.
+Not this-->
+SELECT e.Last_Name, e.Department_Id, d.Department_Name
+FROM emps e INNER JOIN depts d
+ON e.Department_Id = d.Department_id;
+
+SELECT e.Last_Name, e.Department_Id, d.Department_Name
+FROM emps e LEFT JOIN depts d
+ON e.Department_Id = d.Department_id;
+
+-->Write a query to display the employee last name, department name, location ID, and city of all employees who earn a commission.
+
+SELECT e.Last_Name, d.Department_Name, l.Location_id, l.City
+FROM emps e JOIN depts d JOIN locs l
+ON e.Department_Id = d.Department_id AND d.Location_id = l.Location_id AND e.Commission_pct IS NOT NULL;
+
+SELECT e.Last_Name, d.Department_Name, l.Location_id, l.City
+FROM emps e JOIN depts d
+ON e.Department_Id = d.Department_id
+JOIN locs l
+ON l.Location_id =d.Location_id
+WHERE e.Commission_pct IS NOT null;
+
+--> To find all commission point employee
+SELECT e.Last_Name, d.Department_Name, l.Location_id, l.City
+FROM emps e LEFT JOIN depts d
+ON e.Department_Id = d.Department_id
+LEFT JOIN locs l
+ON l.Location_id =d.Location_id
+WHERE e.Commission_pct IS NOT null;
+
+--> Applying Condition (Find whose manager is 149)
+SELECT e.Employee_Id, e.Last_Name, e.Department_Id, d.Department_Name, d.Location_id
+FROM emps e JOIN depts d 
+ON e.Department_Id = d.Department_id AND e.Manager_id = 149;
+
+-->Write a query to display the last name, job, department number, and department name for all employees who work in Toronto.
+
+SELECT e.Last_Name, d.Department_Name, e.Job_Id, e.Department_Id
+FROM emps e JOIN depts d JOIN locs l
+ON e.Department_Id = d.Department_id AND d.Location_id = l.Location_id AND 
+l.City = 'Toronto';
+
+Natural JOin --> Matching table to Innner join and no matching is Cartisian join
+
+-->Display the employee last name and employee number along with their manager’s last name and manager number. Label the columns Employee, Emp#, Manager, and Mgr#, respectively.
+
+SELECT
+e.Last_Name AS Employee, e.Employee_Id as 'EMP#', m.Last_Name AS Manager, m.Employee_Id as 'Mrg#'
+FROM emps e LEFT JOIN emps m
+ON e.Manager_id = m.Employee_Id;
+
+-->VIEW 
+CREATE VIEW test_emp AS
+SELECT e.First_Name, e.Last_Name, d.Department_Name
+FROM emps e join depts d 
+ON e.Department_Id = d.Department_id
+
+DROP VIEW test_emp
